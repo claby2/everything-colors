@@ -91,7 +91,7 @@ header h1, header h3{
     margin: 0 0 10px 0;
 }
 
-.post *, .inputSection *, #output img {
+.post *, .inputSection * {
     max-width: 100%;
     height: auto;
 }
@@ -117,6 +117,31 @@ header h1, header h3{
     padding: 10px;
 }
 
-#output {
-    width: 300px;
+.button{
+    margin: 0 10px 0 10px;
+    font-size: 1.5em;
+    border: 0;
+    font-family: inherit;
+    width: 100px;
+    background-color: #1a1a1b;
+    color: #eaece5;
+    padding: 10px;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.selectedButton {
+    background-color: #eaece5 !important;
+    color: #1a1a1b !important;
+}
+
+#blendOutput {
+    width: 600px;
+}
+
+#blendOutput img{
+    margin: 10px;
+    max-width: 100%;
 }

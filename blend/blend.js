@@ -2,9 +2,10 @@ let dropText = document.getElementById('dropText');
 let dropInput = document.getElementById('dropInput');
 let inputOne = document.getElementById('inputOne');
 let inputTwo = document.getElementById('inputTwo');
-let output = document.getElementById('output');
+let blendOutput = document.getElementById('blendOutput');
 
 var images = [];
+var mode = "XOR";
 
 function getImageData(img, minWidth, minHeight) {
     let canvas = document.createElement('canvas');
@@ -16,7 +17,7 @@ function getImageData(img, minWidth, minHeight) {
     return (ctx.getImageData(0, 0, width, height)).data;
 }
 
-function xorBlend() {
+function blend() {
     let minHeight = Math.min(images[0].naturalHeight, images[1].naturalHeight);
     let minWidth = Math.min(images[0].naturalWidth, images[1].naturalWidth);
 
@@ -32,7 +33,21 @@ function xorBlend() {
 
     for(let i = 0; i < height*width*4; i += 4) {
         for(let j = 0; j < 3; j++) {
-            data[i+j] = imageDataOne[i+j] ^ imageDataTwo[i+j];
+            switch(mode) {
+                case "XOR":
+                    data[i+j] = imageDataOne[i+j] ^ imageDataTwo[i+j];
+                    break;
+                case "AND":
+                    data[i+j] = imageDataOne[i+j] & imageDataTwo[i+j];
+                    break;
+                case "OR":
+                    data[i+j] = imageDataOne[i+j] | imageDataTwo[i+j];
+                    break;
+                default:
+                    data[i+j] = imageDataOne[i+j] ^ imageDataTwo[i+j];
+                    break;
+
+            }
         }
         data[i+3] = 255;
     }
@@ -41,13 +56,13 @@ function xorBlend() {
 
     let canvasElement = document.createElement('img');
     canvasElement.src = canvas.toDataURL("image/png");
-    output.appendChild(canvasElement);
+    blendOutput.appendChild(canvasElement);
 }
 
 function displayImage(files) {
     if(inputOne.childNodes[1] && inputTwo.childNodes[1]) {
         images = [];
-        while(output.firstChild && output.removeChild(output.firstChild));
+        while(blendOutput.firstChild && blendOutput.removeChild(blendOutput.firstChild));
         while(inputOne.childNodes[1] && inputOne.removeChild(inputOne.childNodes[1]));
         while(inputTwo.childNodes[1] && inputTwo.removeChild(inputTwo.childNodes[1]));
     }
@@ -59,11 +74,7 @@ function displayImage(files) {
             inputOne.appendChild(img);
         } else {
             inputTwo.appendChild(img);
-    
-            // Depending on blend mode...
-    
-            xorBlend();
-            
+            blend();
         }
     };
 }
@@ -84,3 +95,17 @@ dropText.onclick = ()=> {
 dropInput.onchange = function() {
     displayImage(this.files);
 };
+
+document.querySelectorAll('.button').forEach((btn) =>{
+    btn.addEventListener('click', ()=> {
+        document.querySelectorAll('.button').forEach((btn) => {
+            btn.classList.remove('selectedButton');
+        });
+        btn.classList.add('selectedButton');
+        mode = btn.innerText;
+        if(inputOne.childNodes[1] && inputTwo.childNodes[1]) {
+            while(blendOutput.firstChild && blendOutput.removeChild(blendOutput.firstChild));
+            blend();
+        }
+    })
+})
