@@ -1,3 +1,13 @@
+let output = document.getElementById('output');
+let canvasHolder = document.getElementById('canvasHolder');
+
+function reset() {
+    colorFreq = [[],[],[]];
+    maxFreq = -1;
+    while(output.firstChild && output.removeChild(output.firstChild));
+    while(canvasHolder.firstChild && canvasHolder.removeChild(canvasHolder.firstChild));
+}
+
 function rgbToHsl(r, g, b) {
     r /= 255, g /= 255, b /= 255;
   
@@ -80,20 +90,77 @@ function sortImage(img) {
 
     ctx.putImageData(imageData, 0, 0);
 
-    document.getElementById('output').appendChild(canvas);
+    output.appendChild(canvas);
+}
+
+let histogram = ((s) => {
+    s.setup = ()=> {
+        WIDTH = 800;
+        HEIGHT = 400;
+        let canvas = s.createCanvas(WIDTH, HEIGHT);
+        canvas.parent('canvasHolder');
+        colors = ["#FF0000", "#00FF00", "#0000FF"];
+        s.noStroke();
+    };
+
+    s.draw = ()=> {
+        for(let i = 0; i < 3; i++) {
+            s.fill(colors[i]);
+            for(let j = 0; j < 256; j++) {
+                let barHeight = colorFreq[i][j] == 0 ? 0 : (colorFreq[i][j]/maxFreq * WIDTH)/2;
+                s.rect(j*(WIDTH/256), HEIGHT - barHeight, WIDTH/256, barHeight);
+            }
+        }
+    }
+});
+
+function makeHistogram(img) {
+    let canvas = document.createElement('canvas');
+    let width = canvas.width = img.naturalWidth;
+    let height = canvas.height = img.naturalHeight;
+    let ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    let imageData = ctx.getImageData(0, 0, width, height);
+    let data = imageData.data;
+
+    for(let i = 0; i < 3; i++) {
+        for(let j = 0; j < 256; j++) {
+            colorFreq[i].push(0);
+        }
+    }
+
+
+    for(let i = 0; i < data.length; i+=4) {
+        for(let j = 0; j < 3; j++) {
+            colorFreq[j][data[i+j]] += 1;
+        }
+    }
+
+    for(let i = 0; i < 3; i++) {
+        for(let j = 0; j < 256; j++) {
+            if(colorFreq[i][j] > maxFreq) {
+                maxFreq = colorFreq[i][j];
+            }
+        }
+    }
+
+    let histogramCanvas = new p5(histogram);
+
 }
 
 function displayImage(files) {
     let img = document.createElement('img');
     img.src = URL.createObjectURL(files[0]);
     img.onload = function() {
-        sortImage(img);        
+        sortImage(img);     
+        makeHistogram(img);   
     }
 
 }
 
 document.ondrop = (event) => {
     event.preventDefault();
+    reset();
     displayImage(event.dataTransfer.files)
 }
 
