@@ -28,14 +28,13 @@ function xorBlend() {
     let height = canvas.height = minHeight;
     let ctx = canvas.getContext('2d');
     let imageData = ctx.getImageData(0, 0, minWidth, minHeight);
-    let data = imageData.data; //Modify data;
+    let data = imageData.data;
 
-    for(let i = 0; i < height*width*4; i++) {
-        if(i%3 != 0) {
-            data[i] = imageDataOne[i] ^ imageDataTwo[i];
-        } else {
-            data[i] = 255;
+    for(let i = 0; i < height*width*4; i += 4) {
+        for(let j = 0; j < 3; j++) {
+            data[i+j] = imageDataOne[i+j] ^ imageDataTwo[i+j];
         }
+        data[i+3] = 255;
     }
 
     ctx.putImageData(imageData, 0, 0);
