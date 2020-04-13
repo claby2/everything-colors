@@ -2,7 +2,9 @@ let output = document.getElementById('output');
 let canvasHolder = document.getElementById('canvasHolder');
 let imagePreview = document.getElementById('imagePreview');
 let results = document.getElementById('results');
+let drop = document.getElementById('drop');
 let dropText = document.getElementById('dropText');
+let dropInput = document.getElementById('dropInput');
 
 function reset() {
     colorFreq = [[],[],[]];
@@ -161,16 +163,23 @@ function displayImage(files) {
 
 document.ondrop = (event) => {
     results.style.display = 'flex';
-    dropText.style.display = 'none';
+    drop.style.margin = 0;
     event.preventDefault();
     reset();
     displayImage(event.dataTransfer.files)
 }
 
-document.ondragover = (event) => {
-    event.preventDefault();
-}
+document.ondragover = (event) => {event.preventDefault();};
 
-document.ondragleave = (event) => {
-    event.preventDefault();
-}
+document.ondragleave = (event) => {event.preventDefault();};
+
+dropText.onclick = ()=> {
+    dropInput.click();
+};
+
+dropInput.onchange = function() {
+    results.style.display = 'flex';
+    drop.style.margin = 0;
+    reset();
+    displayImage(this.files);
+};

@@ -41,8 +41,18 @@ header h1, header h3{
     justify-content: center;
 }
 
-#dropText {
+#drop {
     margin: 40vh 0 0 0;
+}
+
+#dropText {
+    user-select: none;
+    cursor: pointer;
+}
+
+#dropInput {
+    opacity: 0;
+    height: 0;
 }
 
 #section {

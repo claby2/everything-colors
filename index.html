@@ -16,13 +16,17 @@
             <h3>client-side image manipulation</h3>
         </header>
         <div class = "buttons">
+            <a href = "https://www.edwardwibowo.com">ABOUT</a>
             <a href = "https://www.edwardwibowo.com">BITWISE XOR</a>
             <a href = "https://github.com/claby2/everything-colors" target = "_blank"><img src = "images/github.png"></a>
         </div>
     </navbar>
 
     <section id = "section">
-        <h2 id = "dropText">Drop image here...</h2>
+        <div id = "drop">
+            <input id = "dropInput" type = "file" multiple=""></input>
+            <h2 id = "dropText">Drop image (or click here to upload)</h2>
+        </div>
         <div id = "results">
             <div class = "post" id = "imagePreview"><h2 class = "caption">Original Image</h2></div>
             <div class = "post" id = "output"><h2 class = "caption">Sorted</h2></div>
