@@ -30,8 +30,14 @@ header h1, header h3{
     color: inherit;
 }
 
-.buttons a:hover {
+.buttons a:hover:not(.currentPage) {
+    cursor: pointer;
     text-decoration: underline;
+}
+
+.currentPage {
+    user-select: none;
+    font-weight: 700;
 }
 
 #results {
@@ -83,7 +89,7 @@ header h1, header h3{
     margin: 0 0 10px 0;
 }
 
-.post * {
+.post *, .inputSection * {
     max-width: 100%;
     height: auto;
 }
@@ -92,4 +98,19 @@ header h1, header h3{
     .post {
         width: 90vw;
     }
+}
+
+/* Blend Specific */
+
+#inputs {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.inputSection {
+    margin: 10px;
+    background-color: #1a1a1b;
+    width: 300px;
+    padding: 10px;
 }

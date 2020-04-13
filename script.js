@@ -166,7 +166,7 @@ document.ondrop = (event) => {
     drop.style.margin = 0;
     event.preventDefault();
     reset();
-    displayImage(event.dataTransfer.files)
+    displayImage(event.dataTransfer.files);
 }
 
 document.ondragover = (event) => {event.preventDefault();};
