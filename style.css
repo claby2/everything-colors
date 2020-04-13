@@ -2,6 +2,7 @@ body {
     font-family: 'Karla', sans-serif;
     background-color: #030303;
     color: #eaece5;
+    margin: 0 !important;
 }
 
 header h1, header h3{
@@ -9,12 +10,39 @@ header h1, header h3{
     margin: 0;
 }
 
+.logo {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.buttons a {
+    margin: 0 0 0 20px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.buttons a:hover {
+    text-decoration: underline;
+}
+
 #results {
     display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
 
+#dropText {
+    margin: 40vh 0 0 0;
 }
 
 #section {
