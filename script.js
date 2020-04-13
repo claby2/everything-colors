@@ -1,11 +1,15 @@
 let output = document.getElementById('output');
 let canvasHolder = document.getElementById('canvasHolder');
+let imagePreview = document.getElementById('imagePreview');
+let results = document.getElementById('results');
+let dropText = document.getElementById('dropText');
 
 function reset() {
     colorFreq = [[],[],[]];
     maxFreq = -1;
-    while(output.firstChild && output.removeChild(output.firstChild));
-    while(canvasHolder.firstChild && canvasHolder.removeChild(canvasHolder.firstChild));
+    while(imagePreview.childNodes[1] && imagePreview.removeChild(imagePreview.childNodes[1]));
+    while(output.childNodes[1] && output.removeChild(output.childNodes[1]));
+    while(canvasHolder.childNodes[1] && canvasHolder.removeChild(canvasHolder.childNodes[1]));
 }
 
 function rgbToHsl(r, g, b) {
@@ -74,8 +78,6 @@ function sortImage(img) {
         hslData.push([hsl[0], hsl[1], hsl[2], data[i+3]]);
     }
 
-    console.log(hslData[300][2]);
-
     hslData.sort((a, b) => {
         return a[0] - b[0];
     });
@@ -90,20 +92,21 @@ function sortImage(img) {
 
     ctx.putImageData(imageData, 0, 0);
 
-    output.appendChild(canvas);
+    let canvasElement = document.createElement('img');
+    canvasElement.src = canvas.toDataURL("image/png");
+
+    output.appendChild(canvasElement);
 }
 
 let histogram = ((s) => {
     s.setup = ()=> {
-        WIDTH = 800;
-        HEIGHT = 400;
+        WIDTH = canvasHolder.getBoundingClientRect().width;
+        HEIGHT = 300;
         let canvas = s.createCanvas(WIDTH, HEIGHT);
         canvas.parent('canvasHolder');
         colors = ["#FF0000", "#00FF00", "#0000FF"];
         s.noStroke();
-    };
-
-    s.draw = ()=> {
+        s.background("rgba(192, 222, 217, 0.25)");
         for(let i = 0; i < 3; i++) {
             s.fill(colors[i]);
             for(let j = 0; j < 256; j++) {
@@ -111,7 +114,7 @@ let histogram = ((s) => {
                 s.rect(j*(WIDTH/256), HEIGHT - barHeight, WIDTH/256, barHeight);
             }
         }
-    }
+    };
 });
 
 function makeHistogram(img) {
@@ -129,7 +132,6 @@ function makeHistogram(img) {
         }
     }
 
-
     for(let i = 0; i < data.length; i+=4) {
         for(let j = 0; j < 3; j++) {
             colorFreq[j][data[i+j]] += 1;
@@ -145,7 +147,6 @@ function makeHistogram(img) {
     }
 
     let histogramCanvas = new p5(histogram);
-
 }
 
 function displayImage(files) {
@@ -155,10 +156,12 @@ function displayImage(files) {
         sortImage(img);     
         makeHistogram(img);   
     }
-
+    imagePreview.appendChild(img);
 }
 
 document.ondrop = (event) => {
+    results.style.display = 'flex';
+    dropText.style.display = 'none';
     event.preventDefault();
     reset();
     displayImage(event.dataTransfer.files)
