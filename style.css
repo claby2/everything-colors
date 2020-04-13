@@ -138,6 +138,8 @@ header h1, header h3{
 }
 
 #blendOutput {
+    display: flex;
+    align-items: center;
     width: 600px;
 }
 
