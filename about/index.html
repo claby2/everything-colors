@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Description" content="Client-side image manipulation.">
+    <title>Everything Colors - ABOUT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap" rel="stylesheet"> 
+    <link href = "../style.css" rel = "stylesheet">
+</head>
+<body>
+
+    <navbar>
+        <header class = "logo">
+            <h1>Everything Colors</h1>
+            <h3>client-side image manipulation</h3>
+        </header>
+        <div class = "buttons">
+            <a href = "../">HOME</a>
+            <a href = "../blend/">BLEND</a>
+            <a class = "currentPage">ABOUT</a>
+            <a href = "https://github.com/claby2/everything-colors" target = "_blank"><img src = "../images/github.png" alt = "GitHub"></a>
+        </div>
+    </navbar>
+
+    <section id = "aboutSection">
+        <article id = "aboutText">
+            <h3>How to use the website</h3>
+            <p>'Everything Colors' is a website I built to manipulate and analyze images. Features include pixel sorting, color histogram, color palette generation, and image blending. All these processes are done client-side with JavaScript. You can find out more about these processes below.</p>
+            <p>To use the website, follow the instructions on the screen and input an image by dropping it anywhere on the screen when prompted to. Alternatively, you can click on the prompt to add images manually. In the 'BLEND' tab, it requires two images. Once the required(s) have been inputted, you can similarly input more images.  </p>
+            <p>DISCLAIMER: images with a very high resolution tend to take longer to process.</p>
+            
+            <h3>Sorted Image</h3>
+            <p>This feature analyzes each pixel of the image input and sorts them by hue. Initially, each pixel is stored and read as RGBA, during the process, it is converted to HSL. Afterward, the pixels are sorted by hue, the degree on a color wheel which is on a scale from 0 to 360. Pixels with a lower hue degree are placed at the top while higher degrees of hue are near the bottom of the image.</p>
+
+            <h3>Color histogram in RGB space</h3>
+            <p>The histogram is a representation of the image concerning RGB values and each value's frequency in the image. The x-axis is on a scale from 0 to 255 which represents the color's value for that particular channel. The y-axis measures the frequency of each color value. In the histogram, all three channels (red, blue, and green) are presented. Therefore, a larger bar means it is featured in the image more frequently. </p>
+
+            <h3>Color palette</h3>
+            <p>The color palette generates a palette of 4 colors based on the image. It uses a median cut algorithm to sort the pixels which is done recursively. A color API is used to supply each color with an approximate name. Additionally, you can click on the color display to copy the hexadecimal representation of the color. </p>
+
+            <h3>Blend</h3>
+            <p>The blend feature requires two images to function. It compares each pixel of one image with the other. Depending on the blend mode selected, it compares the red, green, and blue value of each pixel and places it in the resulting image. The blend modes are commutative meaning the result would be the same even if the images are put in a different order. </p>
+            <p>There are 3 blend modes, XOR, AND, and OR. Each one represents the logical operation used to compare the pixels.</p>
+            <p>The dimensions of the resulting image are equal to the minimum dimensions between the two images. This means the minimum width and the minimum height between the two images are taken. As a result, if the dimensions of the two images vary greatly it could mean that the larger image would be 'cropped'.</p>
+        </article>
+    </section>
+
+</body>
+</html>
