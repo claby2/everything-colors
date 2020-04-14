@@ -147,3 +147,34 @@ header h1, header h3{
     margin: 10px;
     max-width: 100%;
 }
+
+.bucketHolder {
+    display: flex;
+
+}
+
+.bucket {
+    border: 1px solid #404040;
+    width: 100px;
+    cursor: pointer;
+    margin: 0 20px 20px 0;
+}
+
+.bucket:hover {
+    border-color: #eaece5;
+}
+
+.copy {
+    user-select: none;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    font-weight: 700;
+}
+
+.colorName {
+    font-weight: 700;
+    text-transform: uppercase;
+}

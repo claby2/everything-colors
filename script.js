@@ -1,3 +1,5 @@
+new ClipboardJS('.bucket');
+
 let output = document.getElementById('output');
 let canvasHolder = document.getElementById('canvasHolder');
 let imagePreview = document.getElementById('imagePreview');
@@ -5,6 +7,7 @@ let results = document.getElementById('results');
 let drop = document.getElementById('drop');
 let dropText = document.getElementById('dropText');
 let dropInput = document.getElementById('dropInput');
+let paletteOutput = document.getElementById('paletteOutput');
 
 function reset() {
     colorFreq = [[],[],[]];
@@ -12,6 +15,7 @@ function reset() {
     while(imagePreview.childNodes[1] && imagePreview.removeChild(imagePreview.childNodes[1]));
     while(output.childNodes[1] && output.removeChild(output.childNodes[1]));
     while(canvasHolder.childNodes[1] && canvasHolder.removeChild(canvasHolder.childNodes[1]));
+    while(paletteOutput.childNodes[1] && paletteOutput.removeChild(paletteOutput.childNodes[1]));
 }
 
 function rgbToHsl(r, g, b) {
@@ -62,6 +66,10 @@ function hslToRgb(h, s, l) {
     }
   
     return [ r * 255, g * 255, b * 255 ];
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
 function sortImage(img) {
@@ -151,12 +159,137 @@ function makeHistogram(img) {
     let histogramCanvas = new p5(histogram);
 }
 
+function recursiveSplit(colors, depth) {
+    if(colors.length == 0) {
+        return;
+    }
+    if(depth == 0) {
+        colorBuckets.push(colors);
+        return;
+    }
+    let min = [255, 255, 255];
+    let max = [0, 0, 0];
+    let ranges = [];
+
+    for(let i = 0; i < colors.length; i += 4) {
+        for(let j = 0; j < 3; j++) {
+            min[j] = Math.min(min[j], colors[i][j]);
+            max[j] = Math.max(max[j], colors[i][j]);
+        }
+    }
+
+    ranges[0] = Math.abs(max[0] - min[0]);
+    ranges[1] = Math.abs(max[1] - min[1]);
+    ranges[2] = Math.abs(max[2] - min[2]);
+
+    let max_range = Math.max(ranges[0], Math.max(ranges[1], ranges[2]));
+
+    if(ranges[0] == max_range) {
+        colors.sort((a, b) => {
+            return a[0] - b[0];
+        })
+    } else if(ranges[1] == max_range) {
+        colors.sort((a, b) => {
+            return a[1] - b[1];
+        })
+    } else if(ranges[2] == max_range) {
+        colors.sort((a, b) => {
+            return a[2] - b[2];
+        })
+    }
+
+    let median = Math.floor(colors.length / 2);
+
+    recursiveSplit(colors.slice(0, median), depth - 1);
+    recursiveSplit(colors.slice(median, colors.length), depth - 1);
+}
+
+function makePalette(img, depth) {
+    let canvas = document.createElement('canvas');
+    let width = canvas.width = img.naturalWidth;
+    let height = canvas.height = img.naturalHeight;
+    let ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    let imageData = ctx.getImageData(0, 0, width, height);
+    let data = imageData.data;
+
+    let colors = [];
+
+    for(let i = 0; i < data.length; i+= 4) {
+        let pixel_arr = new Array(3);
+        pixel_arr[0] = data[i];
+        pixel_arr[1] = data[i+1];
+        pixel_arr[2] = data[i+2];
+        colors.push(pixel_arr);
+    }
+
+    recursiveSplit(colors, depth);
+}
+
+function getAverages() {
+    let averages = [];
+    for(let i = 0; i < colorBuckets.length; i++) {
+        let totals = [0, 0, 0];
+        for(let j = 0; j < colorBuckets[i].length; j++) {
+            for(let k = 0; k < 3; k++) {
+                totals[k] += colorBuckets[i][j][k];
+            }
+        }
+        let average = [Math.floor(totals[0]/colorBuckets[i].length), Math.floor(totals[1]/colorBuckets[i].length), Math.floor(totals[2]/colorBuckets[i].length)];
+        averages.push(average);
+    }
+
+    return averages;
+}
+
+function getColorName(hex) {
+    return fetch('https://www.thecolorapi.com/id?hex=' + hex)
+    .then(res => res.json())
+    .then(color => color)
+}
+
 function displayImage(files) {
     let img = document.createElement('img');
     img.src = URL.createObjectURL(files[0]);
     img.onload = function() {
+        colorBuckets = [];
         sortImage(img);     
-        makeHistogram(img);   
+        makeHistogram(img);
+        makePalette(img, 2);
+        let averages = [...new Set(getAverages().map(x => x.join(',')))].map(x => x.split(',').map(e => parseInt(e)));
+        for(let i = 0; i < averages.length; i++) {
+            let bucketHolder = document.createElement('div');
+            bucketHolder.classList.add('bucketHolder');
+
+            let copy = document.createElement('p');
+            copy.innerText = 'COPY';
+            copy.classList.add('copy');
+            let bucketColor = rgbToHex(averages[i][0], averages[i][1], averages[i][2]);
+
+            let bucket = document.createElement('div');
+            bucket.classList.add('bucket');
+            bucket.style.backgroundColor = bucketColor;
+
+            bucket.setAttribute('data-clipboard-action', 'copy');
+            bucket.setAttribute('data-clipboard-text', bucketColor);
+
+            bucket.addEventListener('mouseenter', ()=>{copy.style.visibility = 'visible'});
+            bucket.addEventListener('mouseleave', ()=>{copy.style.visibility = 'hidden'});
+            copy.style.color = averages[i][0] + averages[i][1] + averages[i][2] >= (765)/2 ? "black" : "white";
+
+            let colorName = document.createElement('p');
+            colorName.classList.add('colorName');
+            getColorName(bucketColor.substring(1)).then(color => {
+                colorName.innerText = color.name.value;
+            });
+
+            bucket.appendChild(copy);
+            bucketHolder.appendChild(bucket);
+            bucketHolder.appendChild(colorName);
+
+            paletteOutput.appendChild(bucketHolder);
+
+        }
     }
     imagePreview.appendChild(img);
 }
