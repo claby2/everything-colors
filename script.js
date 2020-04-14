@@ -316,3 +316,10 @@ dropInput.onchange = function() {
     reset();
     displayImage(this.files);
 };
+
+window.addEventListener("resize", ()=>{
+    if(canvasHolder.childNodes[1]) {
+        histogramCanvas.remove();
+        let histogramCanvas = new p5(histogram);
+    }
+})
