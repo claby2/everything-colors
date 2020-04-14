@@ -106,7 +106,7 @@ let histogram = ((s) => {
         HEIGHT = 300;
         let canvas = s.createCanvas(WIDTH, HEIGHT);
         canvas.parent('canvasHolder');
-        colors = ["#FF0000", "#00FF00", "#0000FF"];
+        colors = ["rgba(255, 0, 0, 0.4)", "rgba(0, 255, 0, 0.4)", "rgba(0, 0, 255, 0.4)"];
         s.noStroke();
         s.background("rgba(192, 222, 217, 0.25)");
         for(let i = 0; i < 3; i++) {
