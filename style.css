@@ -139,7 +139,7 @@ header h1, header h3{
 
 #blendOutput {
     display: flex;
-    align-items: center;
+    justify-content: center;
     width: 600px;
 }
 
