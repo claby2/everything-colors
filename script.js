@@ -8,6 +8,7 @@ let drop = document.getElementById('drop');
 let dropText = document.getElementById('dropText');
 let dropInput = document.getElementById('dropInput');
 let paletteOutput = document.getElementById('paletteOutput');
+let colorSpaceOutput = document.getElementById('colorSpaceOutput');
 
 function reset() {
     colorFreq = [[],[],[]];
@@ -16,6 +17,7 @@ function reset() {
     while(output.childNodes[1] && output.removeChild(output.childNodes[1]));
     while(canvasHolder.childNodes[1] && canvasHolder.removeChild(canvasHolder.childNodes[1]));
     while(paletteOutput.childNodes[1] && paletteOutput.removeChild(paletteOutput.childNodes[1]));
+    while(colorSpaceOutput.childNodes[1] && colorSpaceOutput.removeChild(colorSpaceOutput.childNodes[1]));
 }
 
 function rgbToHsl(r, g, b) {
@@ -248,13 +250,80 @@ function getColorName(hex) {
     .then(color => color)
 }
 
+function getFillColor(colorIndexOne, colorIndexTwo, colorOne, colorTwo) {
+    let colors = [0, 0, 0];
+    
+    colors[colorIndexOne] = colorOne;
+    colors[colorIndexTwo] = colorTwo;
+
+    return colors;
+
+}
+
+var tempArr = [];
+
+function generateColorSpace(colorIndexOne, colorIndexTwo, data) {
+    let canvas = document.createElement('canvas');
+    let width = canvas.width = 256;
+    let height = canvas.height = 256;
+    let ctx = canvas.getContext('2d');
+
+    for(let i = 0; i < data.length; i+=4) {
+        if(data[i+colorIndexOne] && data[i+colorIndexTwo]) {
+            ctx.beginPath();
+            let colors = [0, 0, 0];
+            colors[colorIndexOne] = data[i+colorIndexOne];
+            colors[colorIndexTwo] = data[i+colorIndexTwo];
+            ctx.rect(colors[colorIndexOne], height - colors[colorIndexTwo], 1, 1);
+            ctx.fillStyle = rgbToHex(colors[0], colors[1], colors[2]);
+            ctx.fill();
+        }
+    }
+
+    let canvasElement = document.createElement('img');
+    canvasElement.src = canvas.toDataURL("image/png");
+
+    colorSpaceOutput.appendChild(canvasElement);
+}
+
+
+function makeColorSpace(img) {
+
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
+
+    canvas.height = canvas.width * (img.naturalHeight / img.naturalWidth);
+
+    let oc = document.createElement('canvas');
+    let octx = oc.getContext('2d');
+
+    oc.width = img.naturalWidth*0.5;
+    oc.height = img.naturalHeight*0.5
+
+    octx.drawImage(img, 0, 0, oc.width, oc.height);
+
+    octx.drawImage(oc, 0, 0, oc.width*0.5, oc.height*0.5);
+
+    ctx.drawImage(oc, 0, 0, oc.width*0.5, oc.height*0.5, 0, 0, canvas.width, canvas.height);
+
+    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let data = imageData.data;
+
+    
+    generateColorSpace(0, 2, data);
+    generateColorSpace(1, 0, data);
+    generateColorSpace(2, 1, data);
+}
+
 function displayImage(files) {
     let img = document.createElement('img');
     img.src = URL.createObjectURL(files[0]);
     img.onload = function() {
+        console.log("vir");
         colorBuckets = [];
-        sortImage(img);     
+        sortImage(img);
         makeHistogram(img);
+        makeColorSpace(img);
         makePalette(img, 2);
         let averages = [...new Set(getAverages().map(x => x.join(',')))].map(x => x.split(',').map(e => parseInt(e)));
         for(let i = 0; i < averages.length; i++) {
