@@ -39,6 +39,16 @@
             <h3>Color palette</h3>
             <p>The color palette generates a palette of 4 colors based on the image. It uses a median cut algorithm to sort the pixels which is done recursively. A color API is used to supply each color with an approximate name. Additionally, you can click on the color display to copy the hexadecimal representation of the color. </p>
 
+            <h3>Color spaces</h3>
+            <p>This feature includes 3 graphs.</p>
+            <ul>
+                <li>Graph 1: x: Red, y: Blue</li>
+                <li>Graph 2: x: Green, y: Red</li>
+                <li>Graph 3: x: Blue, y: Green</li>
+            </ul>
+            <p>A single channel is ignored in each graph due to the limitations of the 2-dimensional graph. Each axis scales from 0 to 255 representing the value in the particular color channel.</p>
+            <p>It is important to note that this is not a fully accurate representation. To avoid high wait times, this feature downscales the image before rendering the graphs.</p>
+
             <h3>Blend</h3>
             <p>The blend feature requires two images to function. It compares each pixel of one image with the other. Depending on the blend mode selected, it compares the red, green, and blue value of each pixel and places it in the resulting image. The blend modes are commutative meaning the result would be the same even if the images are put in a different order. </p>
             <p>There are 3 blend modes, XOR, AND, and OR. Each one represents the logical operation used to compare the pixels.</p>
