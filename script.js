@@ -8,6 +8,7 @@ let drop = document.getElementById('drop');
 let dropText = document.getElementById('dropText');
 let dropInput = document.getElementById('dropInput');
 let paletteOutput = document.getElementById('paletteOutput');
+let downscaleOutput = document.getElementById('downscaleOutput');
 let colorSpaceOutput = document.getElementById('colorSpaceOutput');
 
 function reset() {
@@ -17,6 +18,7 @@ function reset() {
     while(output.childNodes[1] && output.removeChild(output.childNodes[1]));
     while(canvasHolder.childNodes[1] && canvasHolder.removeChild(canvasHolder.childNodes[1]));
     while(paletteOutput.childNodes[1] && paletteOutput.removeChild(paletteOutput.childNodes[1]));
+    while(downscaleOutput.childNodes[1] && downscaleOutput.removeChild(downscaleOutput.childNodes[1]));
     while(colorSpaceOutput.childNodes[1] && colorSpaceOutput.removeChild(colorSpaceOutput.childNodes[1]));
 }
 
@@ -260,6 +262,33 @@ function getFillColor(colorIndexOne, colorIndexTwo, colorOne, colorTwo) {
 
 }
 
+function downscaleImage(img) {
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
+
+    canvas.height = canvas.width * (img.naturalHeight / img.naturalWidth);
+
+    let oc = document.createElement('canvas');
+    let octx = oc.getContext('2d');
+
+    oc.width = img.naturalWidth*0.5;
+    oc.height = img.naturalHeight*0.5;
+
+    octx.drawImage(img, 0, 0, oc.width, oc.height);
+    octx.drawImage(oc, 0, 0, oc.width*0.5, oc.height*0.5);
+    ctx.drawImage(oc, 0, 0, oc.width*0.5, oc.height*0.5, 0, 0, canvas.width, canvas.height);
+
+    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let data = imageData.data;
+
+    let canvasElement = document.createElement('img');
+    canvasElement.src = canvas.toDataURL("image/png");
+
+    downscaleOutput.appendChild(canvasElement);
+
+    return data;
+}
+
 var tempArr = [];
 
 function generateColorSpace(colorIndexOne, colorIndexTwo, data) {
@@ -286,29 +315,8 @@ function generateColorSpace(colorIndexOne, colorIndexTwo, data) {
     colorSpaceOutput.appendChild(canvasElement);
 }
 
-
 function makeColorSpace(img) {
-
-    let canvas = document.createElement('canvas');
-    let ctx = canvas.getContext('2d');
-
-    canvas.height = canvas.width * (img.naturalHeight / img.naturalWidth);
-
-    let oc = document.createElement('canvas');
-    let octx = oc.getContext('2d');
-
-    oc.width = img.naturalWidth*0.5;
-    oc.height = img.naturalHeight*0.5
-
-    octx.drawImage(img, 0, 0, oc.width, oc.height);
-
-    octx.drawImage(oc, 0, 0, oc.width*0.5, oc.height*0.5);
-
-    ctx.drawImage(oc, 0, 0, oc.width*0.5, oc.height*0.5, 0, 0, canvas.width, canvas.height);
-
-    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let data = imageData.data;
-
+    let data = downscaleImage(img);
     
     generateColorSpace(0, 2, data);
     generateColorSpace(1, 0, data);
@@ -319,7 +327,6 @@ function displayImage(files) {
     let img = document.createElement('img');
     img.src = URL.createObjectURL(files[0]);
     img.onload = function() {
-        console.log("vir");
         colorBuckets = [];
         sortImage(img);
         makeHistogram(img);
