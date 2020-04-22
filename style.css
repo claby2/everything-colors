@@ -214,3 +214,22 @@ header h1, header h3{
         width: 90%;
     }
 }
+
+/* Instant Alpha Specific */
+
+#overlay {
+    position: absolute;
+}
+
+#alpha-canvasHolder {
+    position: absolute;
+    top: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#intensitySlider {
+    position: absolute;
+    top: 200px;
+}

@@ -17,8 +17,8 @@
         </header>
         <div class = "buttons">
             <a href = "../">HOME</a>
-            <a class = "currentPage">BLEND</a>
-            <a href = "../instant-alpha/">INSTANT ALPHA</a>
+            <a href = "../blend/">BLEND</a>
+            <a class = "currentPage">INSTANT ALPHA</a>
             <a href = "../about/">ABOUT</a>
             <a href = "https://github.com/claby2/everything-colors" target = "_blank"><img src = "../images/github.png" alt = "GitHub"></a>
         </div>
@@ -27,20 +27,14 @@
     <section id = "section">
         <div>
             <input id = "dropInput" type = "file" multiple=""></input>
-            <h2 id = "dropText">Drop two images to blend (or click here to upload)</h2>
+            <h2 id = "dropText">Drop image to edit (or click here to upload)</h2>
         </div>
-        <div id = "inputs">
-            <section class = "inputSection" id = "inputOne"><h2>Image 1</h2></section>
-            <section class = "inputSection" id = "inputTwo"><h2>Image 2</h2></section>
-        </div>
-        <div id = "blendButtons">
-            <button id = "xorButton" class = "button selectedButton">XOR</button>
-            <button id = "andButton" class = "button">AND</button>
-            <button id = "orButton" class = "button">OR</button>
-        </div>
-        <div id = "blendOutput"></div>
+
+        <div id = "alpha-canvasHolder"></div>
+        <button id = "tempButton" value = "50"></button>
+        <input type = "range" min="0" max = "181" value="50" class = "slider" id = "intensitySlider" oninput="instantAlpha(this.value);">
     </section>
 
-    <script src = "blend.js"></script>
+    <script src = "instant-alpha.js"></script>
 </body>
 </html>
