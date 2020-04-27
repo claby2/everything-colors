@@ -10,6 +10,7 @@ let dropInput = document.getElementById('dropInput');
 let paletteOutput = document.getElementById('paletteOutput');
 let downscaleOutput = document.getElementById('downscaleOutput');
 let colorSpaceOutput = document.getElementById('colorSpaceOutput');
+let upscaledImage = document.getElementById('upscaledImage');
 
 function reset() {
     colorFreq = [[],[],[]];
@@ -20,6 +21,7 @@ function reset() {
     while(paletteOutput.childNodes[1] && paletteOutput.removeChild(paletteOutput.childNodes[1]));
     while(downscaleOutput.childNodes[1] && downscaleOutput.removeChild(downscaleOutput.childNodes[1]));
     while(colorSpaceOutput.childNodes[1] && colorSpaceOutput.removeChild(colorSpaceOutput.childNodes[1]));
+    while(upscaledImage.childNodes[1] && upscaledImage.removeChild(upscaledImage.childNodes[1]));
 }
 
 function rgbToHsl(r, g, b) {
@@ -323,6 +325,24 @@ function makeColorSpace(img) {
     generateColorSpace(2, 1, data);
 }
 
+function upscaleImage(img) {
+    let canvas = document.createElement('canvas');
+    let width = img.naturalWidth;
+    let height = img.naturalHeight;
+    canvas.width = width*2;
+    canvas.height = height*2;
+    let ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    ctx.webkitImageSmoothingEnabled = false;
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.drawImage(img, 0, 0, width*2, height*2);
+
+    // let canvasElement = document.createElement('img');
+    // canvasElement.src = canvas.toDataURL("image/png");
+
+    upscaledImage.appendChild(canvas);
+}
+
 function displayImage(files) {
     let img = document.createElement('img');
     img.src = URL.createObjectURL(files[0]);
@@ -332,6 +352,7 @@ function displayImage(files) {
         makeHistogram(img);
         makeColorSpace(img);
         makePalette(img, 2);
+        upscaleImage(img);
         let averages = [...new Set(getAverages().map(x => x.join(',')))].map(x => x.split(',').map(e => parseInt(e)));
         for(let i = 0; i < averages.length; i++) {
             let bucketHolder = document.createElement('div');
