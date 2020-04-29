@@ -1,4 +1,4 @@
-# Everything Colors
+### Everything Colors
 Client-side image manipulation.
 
 **[Result](https://www.edwardwibowo.com/everything-colors/)**
@@ -6,4 +6,6 @@ Client-side image manipulation.
 ### Dependencies
 ```
 p5.js
+clipboard.js
+Tesseract.js
 ```
