@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="Description" content="Client-side image manipulation.">
-    <title>Everything Colors - INSTANT ALPHA</title>
+    <title>Everything Colors - OCR</title>
     <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap" rel="stylesheet"> 
     <link href = "../style.css" rel = "stylesheet">
+    <script src='https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js'></script>
 </head>
 <body>
 
@@ -18,24 +19,25 @@
         <div class = "buttons">
             <a href = "../">HOME</a>
             <a href = "../blend/">BLEND</a>
-            <a class = "currentPage">INSTANT ALPHA</a>
-            <a href = "../ocr/">OCR</a>
+            <a href = "../instant-alpha/">INSTANT ALPHA</a>
+            <a class = "currentPage">OCR</a>
             <a href = "../about/">ABOUT</a>
             <a href = "https://github.com/claby2/everything-colors" target = "_blank"><img src = "../images/github.png" alt = "GitHub"></a>
         </div>
     </navbar>
 
     <section id = "section">
+        <h2>OPTICAL CHARACTER RECOGNITION</h2>
         <div>
             <input id = "dropInput" type = "file" multiple=""></input>
-            <h2 id = "dropText">Drop image to edit (or click here to upload)</h2>
+            <h2 id = "dropText">Drop an image with text (or click here to upload)</h2>
         </div>
 
-        <div id = "alpha-canvasHolder"></div>
-        <button id = "tempButton" value = "50"></button>
-        <input type = "range" min="0" max = "181" value="50" class = "slider" id = "intensitySlider" oninput="instantAlpha(this.value);">
+        <div class = "post" id = "imagePreview"></div>
+        <div id = "progressBar-max"><div id = "progressBar"></div></div>
+        <div id = "output-text"></div>
     </section>
 
-    <script src = "instant-alpha.js"></script>
+    <script src = "ocr.js"></script>
 </body>
 </html>

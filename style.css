@@ -241,3 +241,19 @@ header h1, header h3{
     position: absolute;
     top: 200px;
 }
+
+/* OCR Specific */
+
+#progressBar-max {
+    border-radius: 10px;
+    width: 300px;
+    height: 10px;
+    background-color: #404040;
+}
+
+#progressBar {
+    width: 0;
+    border-radius: 10px;
+    background-color: #FAFAFA;
+    height: 10px;
+}
