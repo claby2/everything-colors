@@ -237,9 +237,28 @@ header h1, header h3{
     justify-content: center;
 }
 
+#tempButton {
+    font-size: 1.2em;
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    background-color: #FAFAFA;
+    color: #212121;
+}
+
+#tempButton:hover {
+    cursor: pointer;
+    background-color: #515151;
+    color: #FAFAFA
+}
+
 #intensitySlider {
+    border-radius: 5px;
+    -webkit-appearance: none;
+    background: transparent;
     position: absolute;
-    top: 200px;
+    top: 150px;
+    background-color: #515151;
 }
 
 /* OCR Specific */
