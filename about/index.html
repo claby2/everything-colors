@@ -55,6 +55,12 @@
             <p>The blend feature requires two images to function. It compares each pixel of one image with the other. Depending on the blend mode selected, it compares the red, green, and blue value of each pixel and places it in the resulting image. The blend modes are commutative meaning the result would be the same even if the images are put in a different order. </p>
             <p>There are 3 blend modes, XOR, AND, and OR. Each one represents the logical operation used to compare the pixels.</p>
             <p>The dimensions of the resulting image are equal to the minimum dimensions between the two images. This means the minimum width and the minimum height between the two images are taken. As a result, if the dimensions of the two images vary greatly it could mean that the larger image would be 'cropped'.</p>
+
+            <h3>Instant Alpha</h3>
+            <p>This feature treats the image input as a grid and uses a Depth-First search algorithm. The slider defines the intensity. Increasing the slider value would lower the needed similarity needed to continue the algorithm. The algorithm compares pixel color values in YUV.</p>
+
+            <h3>Optical Character Recognition</h3>      
+            <p>OCR (Optical Character Recognition) will attempt to convert an image which contains text into a digital format. The feature here uses Tesseract.js.</p>      
         </article>
     </section>
 
