@@ -58,14 +58,6 @@ function graphImage(img) {
         y: y,
         z: z,
         mode: 'markers',
-        // marker: {
-        //     size: 5,
-        //     line: {
-        //         color: 'rgba(217, 217, 217, 0.14)',
-        //         width: 0.5
-        //     },
-        //     opacity: 0.8
-        // },
         type: 'scatter3d'
     }
 
