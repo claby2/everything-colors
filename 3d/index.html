@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="Description" content="Client-side image manipulation.">
     <title>Everything Colors - 3D</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap" rel="stylesheet"> 
     <link href = "../style.css" rel = "stylesheet">
 </head>
@@ -27,13 +28,14 @@
     </navbar>
 
     <section id = "section">
-        <!-- <div>
+        <div>
             <input id = "dropInput" type = "file" multiple=""></input>
-            <h2 id = "dropText">Drop image to edit (or click here to upload)</h2>
+            <h2 id = "dropText">Drop image to graph in 3D (or click here to upload)</h2>
         </div>
-        <button id = "tempButton" value = "50">ALPHA</button>
-        <input type = "range" min="0" max = "181" value="50" class = "slider" id = "intensitySlider" oninput="instantAlpha(this.value);">
-        <div id = "alpha-canvasHolder"></div> -->
+        <div class = "post" id = "imagePreview"></div>
+        <div id = "graph"></div>
+
+        <div id = "tester"></div>
     </section>
 
     <script src = "3d.js"></script>
