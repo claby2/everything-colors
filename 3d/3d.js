@@ -1,5 +1,13 @@
 let graph = document.getElementById('graph');
 let imagePreview = document.getElementById('imagePreview');
+let scatterButton = document.getElementById('scatter-button');
+let meshButton = document.getElementById('mesh-button');
+let graphType = document.getElementById('graph-type');
+
+var type = 'scatter3d';
+
+scatterButton.addEventListener("click", ()=>{type = 'scatter3d';reset();graphType.innerText = 'GRAPH TYPE: SCATTER';});
+meshButton.addEventListener("click", ()=>{type = 'mesh3d';reset();graphType.innerText = 'GRAPH TYPE: MESH';});
 
 function reset() {
     while(imagePreview.firstChild && imagePreview.removeChild(imagePreview.firstChild));
@@ -58,7 +66,7 @@ function graphImage(img) {
         y: y,
         z: z,
         mode: 'markers',
-        type: 'scatter3d'
+        type: type
     }
 
     let layout = {

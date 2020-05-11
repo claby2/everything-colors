@@ -32,10 +32,16 @@
             <input id = "dropInput" type = "file" multiple=""></input>
             <h2 id = "dropText">Drop image to graph in 3D (or click here to upload)</h2>
         </div>
+        <div class="dropdown">
+            <button class="dropbtn">SELECT GRAPH TYPE</button>
+            <div class="dropdown-content">
+                <a id = "scatter-button">SCATTER</a>
+                <a id = "mesh-button">MESH</a>
+            </div>
+        </div> 
+        <h3 id = "graph-type">GRAPH TYPE: SCATTER</h3>
         <div class = "post" id = "imagePreview"></div>
         <div id = "graph"></div>
-
-        <div id = "tester"></div>
     </section>
 
     <script src = "3d.js"></script>
