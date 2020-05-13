@@ -8,4 +8,5 @@ Client-side image manipulation.
 p5.js
 clipboard.js
 Tesseract.js
+plotly
 ```
